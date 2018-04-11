@@ -25,7 +25,7 @@ import datetime
 if __name__ == '__main__':
     connection = openerplib.get_connection(hostname="localhost",
                                                port=8069,
-                                               database="10ex2",
+                                               database="10lnbe",
                                                login="admin",
                                                password="admin",
                                                protocol="jsonrpc")
