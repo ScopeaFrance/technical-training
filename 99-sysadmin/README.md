@@ -412,12 +412,13 @@ log_db = False
 
 In some cases, it's not a good idea to use the odoo log rotation internal mechanism, because 2 workers can try to rotate logs at the same time.
 
-To achieve such a goal, we use the logrotate daemon.
+To achieve such a goal, we use the logrotate daemon. We'll also need the pidfile for odoo
 
 ```
 [options]
 ...
 logrotate = False
+pidfile = /var/run/odoo.pid
 ```
 
 ```bash
@@ -439,6 +440,12 @@ $ sudo vi /etc/logrotate.d/odoo
 
     compress
     delaycompress
+    
+    postrotate
+        if [ -f /var/run/odoo.pid ]; then
+            kill -HUP `cat /var/run/odoo.pid`
+        fi
+    endscript
 }
 ```
 
