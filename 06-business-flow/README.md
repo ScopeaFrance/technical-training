@@ -73,4 +73,4 @@ owed should be visible on the customer's form view and should be searchable.
 * [Date field information](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/odoo/fields.py#L1447)
 * [Email template](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/event/data/email_template_data.xml)
 * [Send Email template](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/event/models/event.py#L275)
-* [Cron](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/membership/data/membership_data.xml)
+* [Cron](https://github.com/odoo/odoo/blob/ab5fcb29650349fa641c6130bf6dcbdc1ec28a07/addons/membership/data/membership_data.xml)
