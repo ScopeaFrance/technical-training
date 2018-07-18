@@ -14,6 +14,12 @@ and how they interact with each other. The learner will be able to:
 
 * [Python](https://www.python.org/)
 
+## Notice
+
+No need to build a complete functional module on this exercise! Remember
+that this training is incremental and is intended to show you the
+different tools that the Odoo framework provides.
+
 ## Problem 1: The Citadel (OpenAcademy)
 
 The citadel of the seven kingdoms, located in Oldtown would like to use Odoo to
