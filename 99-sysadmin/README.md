@@ -85,9 +85,11 @@ $ sudo vi /etc/ssh/sshd_config
 ```
 
 ```apacheconf
-AuthorizedKeysFile      %h/.ssh/authorized_keys
-PubkeyAcceptedKeyTypes ssh-dss
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
 ```
+
+Copy your own public key at the end of the file ~/.ssh/authorized_keys (create it if necessary)
 
 ## Have SSH keys
 
@@ -106,7 +108,7 @@ We'll need some tools to check system, like htop for process checking, git for c
 and systat to check I/O. Others will be installed later when necessary.
 
 ```bash
-$ sudo apt install git htop iotop sysstat
+$ sudo apt install iotop sysstat
 ```
 
 ## Fix locale issue
@@ -125,16 +127,11 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/u
 LC_ALL=en_US.UTF-8
 LANG=en_US.UTF-8
 ```
-## Change mirrors location
 
-On the default VM, the ubuntu mirrors are located in the US. This can be changed 
 
 ```bash
-$ vi /etc/apt/sources.list
+$ source /etc/environment
 ```
-
-And replace *http://us.archive.ubuntu.com/ubuntu* with *http://archive.ubuntu.com/ubuntu*
-
 
 # Install PostgreSQL
 
@@ -145,7 +142,7 @@ a more recent version of PostgreSQL. Ubuntu has only one PostgreSQL version per 
 We'll use the PostgreSQL one here.
 
 ```bash
-$ wget https://anonscm.debian.org/cgit/pkg-postgresql/postgresql-common.git/plain/pgdg/apt.postgresql.org.sh
+$ wget https://salsa.debian.org/postgresql/postgresql-common/raw/master/pgdg/apt.postgresql.org.sh
 $ sudo bash apt.postgresql.org.sh
 ```
 
@@ -154,9 +151,7 @@ $ sudo bash apt.postgresql.org.sh
 You'll need the postgresql server itself, the client lib, and pg-activity to check running queries on a real-time basis.
 
 ```bash
-$ sudo apt install postgresql-10 postgresql-client-10 \
-   postgresql-client-common postgresql-common \
-   postgresql-server-dev-10 pg-activity
+$ sudo apt install postgresql-10 libpq-dev pg-activity
 ```
 
 A PostgreSQL user is required by Odoo to connect. For now, we'll use same PostgreSQL username as the unix one to use unix socket.
@@ -189,24 +184,18 @@ We'll use /opt/odoo11 as base dir.
 
 ```bash
 $ cd /opt
-$ sudo mkdir odoo11
-$ sudo chown odoo odoo11
-$ cd odoo11
-$ git clone git@github.com:odoo/odoo.git
-   OR
-$ git clone -b 11.0 --single-branch git@github.com:odoo/odoo.git
-   OR
-$ git clone -b 11.0 --single-branch --depth 1 git@github.com:odoo/odoo.git
+$ sudo mkdir odoo
+$ sudo chown odoo:odoo odoo
+$ cd odoo
+$ git clone -b <branch> --single-branch --depth 1 git@github.com:odoo/odoo.git
+# replace <branch> by the branch you want to clone, e.g. 11.0
 ```
 
 The next one require enterprise access
 
 ```bash
-$ git clone git@github.com:odoo/enterprise.git
-   OR
-$ git clone -b 11.0 --single-branch git@github.com:odoo/enterprise.git
-   OR
-$ git clone -b 11.0 --single-branch --depth 1 git@github.com:odoo/enterprise.git
+$ git clone -b <branch> --single-branch --depth 1 git@github.com:odoo/enterprise.git
+# replace <branch> by the branch you want to clone, e.g. 11.0
 ```
 
 ## Odoo prerequisites
@@ -215,35 +204,30 @@ Odoo have some required python packages (like the web server, db connection libr
 some C/C++ headers to compile. We install the required C/C++ dev libraries from distribution repo, then we use pip 
 to install the Odoo python required packages.
 
-** Odoo is running on CPython >= 3.4! **
-
-### Compile and Install last python
-
-```bash
-$ wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
-$ tar xvf Python-3.6.4.tgz
-$ cd Python-3.6.4
-$ ./configure --enable-optimizations
-$ make -j8
-$ sudo make install
-```
+**As of 11.0, Odoo runs on CPython >= 3.4!**
 
 ### Use distribution stock python 3
 
 ```bash
-$ sudo apt install python3 python3-dev python3-pip
+$ sudo apt install python3-dev python3-pip
 ```
 
 ### Prerequisites
 
 ```bash
 $ sudo apt install libxml2-dev libxslt1-dev libjpeg-dev \
-   libjpeg8-dev libpng12-dev libldap2-dev libsasl2-dev node-less
+  libpng-dev libldap2-dev libsasl2-dev node-less
 $ cd /opt/odoo11/odoo
 $ sudo pip3 install pip --upgrade
 $ sudo pip3 install -r requirements.txt --upgrade
 $ sudo pip3 install phonenumbers pyOpenSSL
+# as of Odoo 12, sassc will be Required
+$ sudo apt install sassc
 ```
+NB: You may encounter the following error when installing requirements:
+*Cannot uninstall 'pyserial'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.*
+
+In this case, simply edit requirements.txt and remove the corresponding line and rerun the command
 
 ## First launch
 
@@ -252,8 +236,8 @@ we'll just use one option on the command line to explain where we can find addon
 the community ones!
 
 ```bash
-$ cd /opt/odoo11/odoo
-$ ./odoo-bin --addons-path=/opt/odoo11/enterprise,/opt/odoo11/odoo/addons
+$ cd /opt/odoo/odoo
+$ ./odoo-bin --addons-path=/opt/odoo/enterprise,/opt/odoo/odoo/addons
 ```
 
 Hit CTRL+C twice to stop the server.
@@ -264,8 +248,9 @@ To print reports, odoo generates an html, send it to wkhtmltopdf which is in cha
 
 ```bash
 $ sudo apt install libxrender1 fontconfig
-$ wget http://nightly.odoo.com/deb/xenial/wkhtmltox-0.12.1_linux-trusty-amd64.deb
-$ sudo dpkg -i wkhtmltox-0.12.1_linux-trusty-amd64.deb
+$ wget https://nightly.odoo.com/deb/bionic/wkhtmltox_0.12.1.3-1~bionic_amd64.deb
+$ sudo apt install xfonts-75dpi
+$ sudo dpkg -i wkhtmltox_0.12.1.3-1~bionic_amd64.deb
 ```
 
 # NGinx
