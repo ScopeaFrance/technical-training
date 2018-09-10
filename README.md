@@ -1,56 +1,78 @@
-# Odoo 12.0 - Technical Training
+# Business Flow
 
-This repository contains training material for learning Odoo 12. The training is divided in modules of roughly half a day. It will follow a problem-based learning approach. The learnees will handle ill-structured problems supervised framed by a teacher. That means that each problem has multiple solutions and therefore is not constrained to a single topic. Each module focuses on a given topic but with a similar approach.
+## Goal
 
-Each module provides some reference material, and proposes problems for the learnees to solve on the topic at hand.
-It is therefore a hands-on, practical approach to the development of Odoo modules. Each module is independent with requirement depending on skills and knowledge that may be learned from previous modules. The problems proposed in those modules have an existing starting situation but that are contextualised around a couple of [use cases](docs/use-case.md).
+The goal of this module is to learn how to create a business workflow. The learner will be able to
 
-## Organisation
-
-We consciously decided to give a training that will have "less content" with a better learning experience which is to lead the learnees to autonomy in their work with Odoo and acquire long term skills. "*True learning is based on discovery guided by mentoring rather than the transmission of knowledge*" (John Dewey). The problem-based approach we chose requires the learnees to first start with a problem without pregiven theory to create a better craddle for new skills to be learned. The teacher will be there to coach and guide the learnee through that process without forcing it. Emphasis will be put on interaction with other learnee as they solve the problems. 
-
-### Practical details
-
-* The work will be with an odoo.sh environment except for our System administration modules. The odoo.sh environment will be set up with your github account on which you will fork this repository. For the System administration modules, it will be simulated with virtual machines that can be run with [Virtual Box](https://www.virtualbox.org/) on your own machines. The virtual to be ran can be downloaded here for the [Odoo System Administration](http://download.odoo.com/internal/sysadmin-training-vms.zip).
-* Per module, which takes around half a day, groups of 2 will be created to solve the problem (2 persons per computer). The groups will be switched after every single module. Not all problem per module have to be solved (it varies on the level of the given group).
-* At the end of a module, debriefing session will be given based on the questions and solutions that came from the process of solving the problems. The learnees will have to verbalize what they have learned with interaction with the rest of the group and feedback from the teacher.
-* In addition to the modules, the learnees will be required to provide 2 questions in the morning about Odoo based on the previous day for discussion in the morning as a way of putting everyone back in the right state ready to attack the next modules.
-
-#### [Introduction presentation](https://docs.google.com/a/odoo.com/presentation/d/1O2hd-jNtZN93-hhi_KFKgRVw90Yfdow6Su7YHF6oc_s/edit?usp=sharing)
-
-## Base Requirements
-
-This training uses Git for its repository, and Github as its platform.
-Start with module [Git and Github](00-git) if you never used them.
-
-The language [Python](https://www.python.org/) is a requirement for almost all modules.
+* trigger actions, methods from manual input and depending on specific conditions;
+* automate action based on time conditions.
 
 
-## Modules
+## Requirements
 
-1. [Models, Fields and Relations](01-models)
-1. [Computed Fields, Onchange and Constraints](02-fields)
-1. [Basic Views](03-views)
-1. [Model Inheritance](04-model-inheritance)
-1. [View Inheritance](05-view-inheritance)
-1. [Business Flow](06-business-flow)
-1. [Access Rights](08-access-right)
-1. [Play with the ORM](09-orm)
-1. [Reports](10-reports)
-1. [Controllers](11-controller)
+* [Models, Fields and Relations](../01-models)
+* [Computed Fields, Onchange and Constraints](../02-fields)
+* [Basic Views](../03-views)
+* [Model Inheritance](../04-model-inheritance)
+* [ORM](../09-orm)
 
 
-## Advanced Modules
+## Problem 1: The Citadel (OpenAcademy)
 
-1. [Mail Integration](15-widgets)
-1. [Mail Integration](16-advanced-customization)
-1. [Mail Integration](17-creating-views)
-1. [Modify Business Flows](19-modify-business-flow)
-1. [Mail Integration](25-mail-integration)
-1. [Kanban Views and Dashboards](26-kanban-dashboard)
-1. [Advanced Widgets](27-widgets)
+The citadel is pleased with the way Odoo allows the Archmaesters to have more
+time to take care of their ravens, which are the only trustworthy way of
+communicating in all Westeros.
+
+They have noticed that, in the current state of the system, the sessions are all
+considered equal. They would like to differentiate sessions that are in
+preparation from those that are ready to be given. They would love to have a way
+to automatically set sessions as confirmed when you have at least 50% of the
+seats filled.
+
+The Maesters would grant you an additional link to your chain if the instructor
+and teacher involved could be notified and keep an history of those
+notifications. They heard about something called the chatter...
 
 
-## Odoo System Administration
+## Problem 2: Library management
 
-* [Training Material](99-sysadmin)
+Brussels' library uses Odoo to manage their customers and books. Their module
+has been built on top of existing modules: for modeling the books, they
+inherited the model `product.product`, and for the customers, authors and
+publishers, they inherited the model `res.partner`.
+
+They would like to enhance the system: they want to manage the payments of the
+customers, what they owe. For regular payments, depending on the length of the
+rental, but also a fine when the book is never returned and is lost. To avoid
+having to manage the rental, the books and the customers everywhere, it would be
+neat to trigger most of the actions from the rental form view. The total amount
+owed should be visible on the customer's form view and should be searchable.
+
+- **Hint**: To manage the time, you can use methods defined on the Date field.
+
+#### Extra task
+
+* The librarians know that most of the time, people just forget about a rented
+  book, so they would like to have a reminder mechanism to notify the customer.
+
+
+## Resources
+
+### Reference
+
+
+* [Status bar](http://www.odoo.com/documentation/11.0/reference/views.html#the-status-bar)
+* [Recordset operations](http://www.odoo.com/documentation/11.0/reference/orm.html#other-recordset-operations)
+* [Environment](http://www.odoo.com/documentation/11.0/reference/orm.html#environment)
+* [Online Tutorial](http://www.odoo.com/documentation/11.0/howtos/backend.html#build-an-odoo-module)
+
+### Code Sample
+
+* [Form buttons](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/account/views/account_invoice_view.xml#L220)
+* Chatter example:
+  - [Model](https://github.com/odoo/odoo/blob/d9235a8f14a2dbd23a5640ffd1ec6bef4f235640/addons/sale/models/sale.py#L22)
+  - [View](https://github.com/odoo/odoo/blob/d9235a8f14a2dbd23a5640ffd1ec6bef4f235640/addons/sale/views/sale_views.xml#L398)
+* [Date field information](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/odoo/fields.py#L1447)
+* [Email template](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/event/data/email_template_data.xml)
+* [Send Email template](https://github.com/odoo/odoo/blob/76c443eda331b75bf5dfa7ec22b8eb22e1084343/addons/event/models/event.py#L275)
+* [Cron](https://github.com/odoo/odoo/blob/ab5fcb29650349fa641c6130bf6dcbdc1ec28a07/addons/membership/data/membership_data.xml)
